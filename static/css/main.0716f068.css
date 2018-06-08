@@ -45,22 +45,22 @@ a {
 
 @font-face {
   font-family: 'HelveticaNeueLT';
-  src: url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-thin.aac7c0fc.eot);
-  src: url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-thin.aac7c0fc.eot?#iefix) format("embedded-opentype"), url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-thin.f25d4f0e.woff) format("woff"), url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-thin.957c7a8c.otf) format("opentype");
+  src: url(/static/media/helvetica-neue-lt-thin.aac7c0fc.eot);
+  src: url(/static/media/helvetica-neue-lt-thin.aac7c0fc.eot?#iefix) format("embedded-opentype"), url(/static/media/helvetica-neue-lt-thin.f25d4f0e.woff) format("woff"), url(/static/media/helvetica-neue-lt-thin.957c7a8c.otf) format("opentype");
   font-weight: 100;
   font-style: normal; }
 
 @font-face {
   font-family: 'HelveticaNeueLT';
-  src: url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-light.f373868c.eot);
-  src: url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-light.f373868c.eot?#iefix) format("embedded-opentype"), url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-light.4ddbadcb.woff) format("woff"), url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-light.06137036.otf) format("opentype");
+  src: url(/static/media/helvetica-neue-lt-light.f373868c.eot);
+  src: url(/static/media/helvetica-neue-lt-light.f373868c.eot?#iefix) format("embedded-opentype"), url(/static/media/helvetica-neue-lt-light.4ddbadcb.woff) format("woff"), url(/static/media/helvetica-neue-lt-light.06137036.otf) format("opentype");
   font-weight: normal;
   font-style: normal; }
 
 @font-face {
   font-family: 'HelveticaNeueLT';
-  src: url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-bold.f16f6414.eot);
-  src: url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-bold.f16f6414.eot?#iefix) format("embedded-opentype"), url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-bold.417e7d97.woff) format("woff"), url(/sergey-chuvayev.github.io/static/media/helvetica-neue-lt-bold.9ac7e2ff.otf) format("opentype");
+  src: url(/static/media/helvetica-neue-lt-bold.f16f6414.eot);
+  src: url(/static/media/helvetica-neue-lt-bold.f16f6414.eot?#iefix) format("embedded-opentype"), url(/static/media/helvetica-neue-lt-bold.417e7d97.woff) format("woff"), url(/static/media/helvetica-neue-lt-bold.9ac7e2ff.otf) format("opentype");
   font-weight: bold;
   font-style: normal; }
 
@@ -74,11 +74,12 @@ body, html {
   scrollbar-arrow-color: ButtonText !important; }
 
 html {
-  font-size: 14px;
+  font-size: 16px;
   overflow: hidden;
   background-color: #1B1B1B; }
-  @media screen and (max-width: 1023px) {
+  @media screen and (max-width: 600px) {
     html {
+      font-size: 18px;
       overflow: initial; } }
 
 body {
@@ -131,6 +132,7 @@ body {
       -ms-flex-direction: column;
       flex-direction: column;
       min-height: 70px;
+      margin-top: 10px;
       -webkit-box-align: baseline;
       -ms-flex-align: baseline;
       align-items: baseline;
@@ -196,7 +198,7 @@ body {
   @media screen and (max-width: 767px) {
     .style__container__1H1am {
       padding: 0 10px;
-      margin-bottom: 20px;
+      margin: 20px 0;
       min-height: initial; } }
 
 .style__item__1pfEc {
@@ -227,7 +229,7 @@ body {
       padding: 0 10px; } }
 .style__image__n5Ibj {
   margin-right: 50px;
-  background-image: url(/sergey-chuvayev.github.io/static/media/sergey.bd656cac.png);
+  background-image: url(/static/media/sergey.bd656cac.png);
   background-size: cover;
   background-position: center;
   width: 507px; }
@@ -305,6 +307,9 @@ body {
 .style__desc__1tMHH {
   max-width: 340px;
   padding-top: 1em; }
+  @media screen and (min-width: 767px) {
+    .style__desc__1tMHH {
+      margin-right: 1.8em; } }
 
 .style__title__TEglP {
   font-size: 1.12em;
@@ -338,7 +343,8 @@ body {
     .style__content__1-Uy6 {
       height: initial;
       width: 100%;
-      margin-top: 0; } }
+      margin-top: 0;
+      overflow: initial; } }
 
 .style__content-inner__1G2MB {
   display: -webkit-box;
@@ -357,24 +363,15 @@ body {
       padding-top: 0; } }
 
 .style__img__3HL8m {
-  margin-top: 2em;
-  height: 60vh;
-  width: 100%;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat; }
-  @media screen and (max-width: 1350px) {
-    .style__img__3HL8m {
-      height: 500px; } }
-  @media screen and (max-width: 1200px) {
-    .style__img__3HL8m {
-      height: 400px; } }
-  @media screen and (max-width: 1023px) {
-    .style__img__3HL8m {
-      height: 300px; } }
-  @media screen and (max-width: 767px) {
-    .style__img__3HL8m {
-      height: 200px; } }
+  margin-top: 2em; }
+  .style__img__3HL8m img {
+    width: 100%;
+    height: 60vh;
+    -o-object-fit: contain;
+    object-fit: contain; }
+    @media screen and (max-width: 1200px) {
+      .style__img__3HL8m img {
+        height: initial; } }
 
 .style__music__NxKIH {
   width: 100%; }
@@ -397,12 +394,93 @@ body {
   margin-top: 2em; }
   .style__navigation__3bUqX .style__prev__2n-AJ, .style__navigation__3bUqX .style__next__2I-uH {
     opacity: .6;
-    font-size: .8em;
+    font-size: .88em;
     -webkit-transition: opacity 150ms;
     transition: opacity 150ms;
     cursor: pointer; }
     .style__navigation__3bUqX .style__prev__2n-AJ:hover, .style__navigation__3bUqX .style__next__2I-uH:hover {
       opacity: 1; }
+@-webkit-keyframes style__ball-scale-pulse__1yp3E {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0); }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1); } }
+
+@keyframes style__ball-scale-pulse__1yp3E {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0); }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1); } }
+
+.style__la-ball-scale-pulse__3LddA,
+.style__la-ball-scale-pulse__3LddA > div {
+  position: relative;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
+.style__la-ball-scale-pulse__3LddA {
+  display: block;
+  font-size: 0;
+  color: #fff; }
+
+.style__la-ball-scale-pulse__3LddA.style__la-dark__2EWgN {
+  color: #333; }
+
+.style__la-ball-scale-pulse__3LddA > div {
+  display: inline-block;
+  float: none;
+  background-color: currentColor;
+  border: 0 solid currentColor; }
+
+.style__la-ball-scale-pulse__3LddA {
+  width: 32px;
+  height: 32px;
+  opacity: .1; }
+
+.style__la-ball-scale-pulse__3LddA > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  opacity: .5;
+  -webkit-animation: style__ball-scale-pulse__1yp3E 3s infinite ease-in-out;
+  animation: style__ball-scale-pulse__1yp3E 3s infinite ease-in-out; }
+
+.style__la-ball-scale-pulse__3LddA > div:last-child {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s; }
+
+.style__la-ball-scale-pulse__3LddA.style__la-sm__gCgUw {
+  width: 16px;
+  height: 16px; }
+
+.style__la-ball-scale-pulse__3LddA.style__la-sm__gCgUw > div {
+  width: 16px;
+  height: 16px; }
+
+.style__la-ball-scale-pulse__3LddA.style__la-2x__2cYXs {
+  width: 64px;
+  height: 64px; }
+
+.style__la-ball-scale-pulse__3LddA.style__la-2x__2cYXs > div {
+  width: 64px;
+  height: 64px; }
+
+.style__la-ball-scale-pulse__3LddA.style__la-3x__25fsw {
+  width: 96px;
+  height: 96px; }
+
+.style__la-ball-scale-pulse__3LddA.style__la-3x__25fsw > div {
+  width: 96px;
+  height: 96px; }
 .style__container__2o9C8 {
   background-color: #1B1B1B;
   position: fixed;
@@ -456,4 +534,4 @@ body {
   .style__logo__35WSj span:last-child {
     font-size: 12px; }
 
-/*# sourceMappingURL=main.1c810d01.css.map*/
+/*# sourceMappingURL=main.0716f068.css.map*/
