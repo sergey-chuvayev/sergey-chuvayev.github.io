@@ -52,16 +52,16 @@
       }
       .img {
         position: absolute;
-        width: 522px;
-        height: 522px;
-        left: 216px;
-        top: 204px;
+        width: 447px;
+        height: 447px;
+        right: 0;
+        bottom: 0;
       }
       .text {
         position: absolute;
-        width: 383px;
-        left: 55px;
-        top: 45px;
+        width: 353px;
+        left: 25px;
+        top: 25px;
         z-index: 1;
         font-family: Yeseva One;
         font-style: normal;
@@ -108,6 +108,14 @@
       .iframe {
         margin-top: 23px;
       }
+      .num {
+        position: absolute;
+        height: 25px;
+        right: 25px;
+        top: 66px;
+        font-size: 31px;
+        color: white;
+      }
     </style>
   </head>
   <body>
@@ -115,8 +123,9 @@
       <div class="entropy">
         world is entropy. only you create rules and see the meaning
       </div>
-      <a href="https://bit.ly/349flF1" target="_blank">
+      <a href="https://bit.ly/349flF1" target="_blank" style="display: block;">
         <div class="artwork">
+          <div class="num" id="num">#</div>
           <div class="link-to" id="link-to">
             <a href="https://bit.ly/349flF1" target="_blank">listen now on soundcloud</a>
           </div>
@@ -128,8 +137,7 @@
           </div>
           <img src="https://source.unsplash.com/featured/?{RANDOM}" id="img" class="img" />
           <div class="cred">
-            <span>СКРЕПЫ</span>
-            <span id="num">#</span>
+            СКРЕПЫ
           </div>
         </div>
       </a>
