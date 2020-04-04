@@ -58,11 +58,30 @@
         font-size: 32px;
         line-height: 37px;
       }
+      .loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        background: #0000ff7d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .loading-text {
+        color: aquamarine;
+        font-size: 24px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="artwork">
+        <div class="loading" id="loading" style="display: none;">
+          <div class="loading-text">loading</div>
+        </div>
         <div class="text" id="text">
           The network is represented by a set of abstract machines that can exchange messages. These messages consist of formal terms. These terms reveal some of the internal structure of the messages, but some parts will hopefully remain opaque to the adversary.
         </div>
@@ -97,9 +116,16 @@
         const text = document.getElementById("text");
         const num = document.getElementById("num");
         const img = document.getElementById("img");
+        const loading = document.getElementById("loading");
         const button = document.getElementById("generate");
         num.innerText = `${Math.floor(Math.random() * 99)}#`;
-        button.addEventListener('click', () => { fetchData() });
+        button.addEventListener('click', () => {
+          fetchData();
+          loading.style = 'display: flex;';
+          setTimeout(() => {
+            loading.style = 'display: none;';
+          }, 3000);
+        });
       }
 
       window.addEventListener('load', () => { init() })
