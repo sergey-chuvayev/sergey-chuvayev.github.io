@@ -1,1 +1,100 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="theme-color" content="#000000"><link rel="manifest" href="/manifest.json"><link rel="shortcut icon" href="/favicon.ico"><title>Sergey Chuvayev Portfolio - Web, UX/UI, Design, Music</title><link href="/static/css/main.b103b42b.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><script type="text/javascript" src="/static/js/main.5e6e68bf.js"></script></body></html>
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        font-family: 'Yeseva One';
+      }
+      
+      .artwork {
+        background: #000;
+        width: 814px;
+        height: 814px;
+        color: #fff;
+        position: relative;
+      }
+      .generate button {
+        margin-top: 16px;
+        font-size: 20px;
+      }
+      .img {
+        position: absolute;
+        width: 522px;
+        height: 522px;
+        left: 216px;
+        top: 204px;
+      }
+      .text {
+        position: absolute;
+        width: 383px;
+        left: 55px;
+        top: 45px;
+        z-index: 1;
+        font-family: Yeseva One;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 20px;
+        line-height: 23px;
+      }
+      .cred {
+        position: absolute;
+        width: 143px;
+        height: 37px;
+        left: 55px;
+        top: 745px;
+        display: flex;
+        justify-content: space-between;
+        width: 710px;
+        font-size: 32px;
+        line-height: 37px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="artwork">
+        <div class="text" id="text">
+          The network is represented by a set of abstract machines that can exchange messages. These messages consist of formal terms. These terms reveal some of the internal structure of the messages, but some parts will hopefully remain opaque to the adversary.
+        </div>
+        <img src="https://source.unsplash.com/featured/?{RANDOM}" id="img" class="img" />
+        <div class="cred">
+          <span>СКРЕПЫ</span>
+          <span id="num">#</span>
+        </div>
+      </div>
+      <div class="generate">
+        <button id="generate">generate random artwork</button>
+        <!-- Скрепы by Human Connections -->
+      </div>
+    </div>
+    <script>
+      const fetchData = () => {
+        fetch('https://litipsum.com/api/json').then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          text.innerText = data.text[0].slice(0, 400);
+        });
+
+        fetch('https://source.unsplash.com/featured/?{RANDOM}').then((response) => {
+          img.src = response.url;
+        })
+      }
+
+      const init = () => {
+        const text = document.getElementById("text");
+        const num = document.getElementById("num");
+        const img = document.getElementById("img");
+        const button = document.getElementById("generate");
+        num.innerText = `${Math.floor(Math.random() * 99)}#`;
+        button.addEventListener('click', () => { fetchData() });
+      }
+
+      window.addEventListener('load', () => { init() })
+    </script>
+  </body>
+</html>
