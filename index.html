@@ -117,7 +117,7 @@
       </div>
       <a href="https://bit.ly/349flF1" target="_blank">
         <div class="artwork">
-          <div class="link-to">
+          <div class="link-to" id="link-to">
             <a href="https://bit.ly/349flF1" target="_blank">listen now on soundcloud</a>
           </div>
           <div class="loading" id="loading" style="display: none;">
@@ -158,14 +158,17 @@
         const text = document.getElementById("text");
         const num = document.getElementById("num");
         const img = document.getElementById("img");
+        const linkto = document.getElementById("link-to");
         const loading = document.getElementById("loading");
         const button = document.getElementById("generate");
         num.innerText = `${Math.floor(Math.random() * 99)}#`;
         button.addEventListener('click', () => {
           fetchData();
           loading.style = 'display: flex;';
+          linkto.style = 'opacity: 0;';
           setTimeout(() => {
             loading.style = 'display: none;';
+            linkto.style = 'opacity: 1;';
           }, 3000);
         });
       }
