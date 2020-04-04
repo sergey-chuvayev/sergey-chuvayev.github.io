@@ -1,5 +1,7 @@
 <html>
   <head>
+    <link rel="icon" 
+      href="favicon.ico">
     <style>
       body {
         display: flex;
@@ -10,7 +12,9 @@
         padding: 0;
         margin: 0;
       }
-      
+      .container {
+        transform: scale(0.9);
+      }
       .artwork {
         background: #000;
         width: 814px;
@@ -73,9 +77,10 @@
         display: flex;
         justify-content: space-between;
         font-family: Times;
-        width: 710px;
         font-size: 32px;
         line-height: 37px;
+        z-index: 5;
+        letter-spacing: 0.5px;
       }
       .loading {
         position: absolute;
@@ -84,16 +89,18 @@
         width: 100%;
         height: 100%;
         z-index: 2;
-        background: #0000ff7d;
+        background: #000000b0;
         display: flex;
         align-items: center;
         justify-content: center;
       }
       .loading-text {
-        color: aquamarine;
+        color: cyan;
         font-size: 24px;
         text-align: center;
-        width: 60%;
+        position: absolute;
+        left: 432px;
+        top: 384px;
       }
       .entropy {
         font-size: 10px;
@@ -117,7 +124,7 @@
         position: absolute;
         bottom: 25px;
         left: 432px;
-        z-index: 5;
+        z-index: 2;
         font-size: 29px;
         background: none;
         font-size: 20px;
@@ -145,7 +152,7 @@
         </div> -->
         <button class="button" id="generate">show next connection →</button>
         <div class="loading" id="loading" style="display: none;">
-          <div class="loading-text">searching in entropy</div>
+          <div class="loading-text">searching in entropy...</div>
         </div>
         <div class="text" id="text">
           The network is represented by a set of abstract machines that can exchange messages. These messages consist of formal terms. These terms reveal some of the internal structure of the messages, but some parts will hopefully remain opaque to the adversary.
@@ -170,7 +177,7 @@
           text.innerText = data.text[0].slice(0, 400);
         });
 
-        fetch(`https://source.unsplash.com/featured/?{dogs}&a=${Math.random()}`).then((response) => {
+        fetch(`https://source.unsplash.com/featured/?{fun}&a=${Math.random()}`).then((response) => {
           img.src = response.url;
         })
       }
@@ -182,7 +189,7 @@
         const generate = document.getElementById("generate");
         const loading = document.getElementById("loading");
         const button = document.getElementById("generate");
-        num.innerText = `#${Math.floor(Math.random() * 99)}`;
+        num.innerText = `#${Math.floor(Math.random() * 999)}`;
         button.addEventListener('click', () => {
           fetchData();
           loading.style = 'display: flex;';
