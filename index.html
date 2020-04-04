@@ -14,7 +14,6 @@
         margin: 0;
       }
       .container {
-        transform: scale(0.9);
       }
       .artwork {
         background: #000;
@@ -178,7 +177,7 @@
           return response.json();
         })
         .then((data) => {
-          text.innerText = data.text[0].slice(0, 400);
+          text.innerText = data.text[0].slice(0, 400) + '...';
         });
 
         fetch(`https://source.unsplash.com/random`).then((response) => {
