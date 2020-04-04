@@ -93,7 +93,7 @@
         width: 100%;
         height: 100%;
         z-index: 2;
-        background: #000000b0;
+        background: rgba(0, 0, 0, 0.8);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -181,7 +181,7 @@
           text.innerText = data.text[0].slice(0, 400);
         });
 
-        fetch(`https://source.unsplash.com/featured/?{fun}&a=${Math.random()}`).then((response) => {
+        fetch(`https://source.unsplash.com/random`).then((response) => {
           img.src = response.url;
         })
       }
