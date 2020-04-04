@@ -19,12 +19,33 @@
         color: #fff;
         position: relative;
       }
+      .artwork:hover .link-to {
+        display: flex;
+      }
+      .link-to {
+        color: blueviolet;
+        position: absolute;
+        top: 0;
+        left: 23px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        z-index: 3;
+        font-size: 30px;
+        cursor: pointer;
+        display: none;
+      }
+      .link-to a {
+        color: greenyellow;
+      }
       .generate {
         display: flex;
         justify-content: space-between;
         align-items: baseline;
         font-size: 20px;
         margin-top: 16px;
+        margin-bottom: 30px;
       }
       .generate button {
         font-size: 20px;
@@ -79,8 +100,10 @@
         width: 60%;
       }
       .entropy {
+        margin: 10px 0;
+        letter-spacing: 7px;
+        font-size: 13px;
         text-align: center;
-        margin-top: 23px;
       }
       .iframe {
         margin-top: 23px;
@@ -89,8 +112,14 @@
   </head>
   <body>
     <div class="container">
+      <div class="entropy">
+        it's random. only you create the order out of entropy
+      </div>
       <a href="https://bit.ly/349flF1" target="_blank">
         <div class="artwork">
+          <div class="link-to">
+            <a href="https://bit.ly/349flF1" target="_blank">listen now on soundcloud</a>
+          </div>
           <div class="loading" id="loading" style="display: none;">
             <div class="loading-text">creating the semantic connection between text and picture</div>
           </div>
@@ -105,12 +134,9 @@
         </div>
       </a>
       <div class="generate">
-        <button id="generate">generate random artwork</button>
-        <a href="https://bit.ly/349flF1">mix link</a>
+        <button id="generate">generate random connection</button>
+        <a href="https://bit.ly/349flF1" target="_blank">listen now on soundcloud</a>
         <!-- Скрепы by Human Connections -->
-      </div>
-      <div class="entropy">
-        it's random. only you create the order out of entropy
       </div>
       <img src="https://bit.ly/39G1cAo" style="display: none;" />
     </div>
