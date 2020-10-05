@@ -1,212 +1,290 @@
 <html>
-  <head>
-    <title>World is entropy. Only you create rules and see the meaning.</title>
-    <link rel="icon" 
-      href="favicon.ico">
-    <style>
-      body {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        flex-direction: column;
-        font-family: Times;
-        padding: 0;
-        margin: 0;
-      }
-      .container {
-      }
-      .artwork {
-        background: #000;
-        width: 814px;
-        height: 814px;
-        color: #fff;
-        position: relative;
-      }
-      .artwork:hover .link-to {
-        display: flex;
-      }
-      .link-to {
-        color: blueviolet;
-        position: absolute;
-        top: 0;
-        left: 23px;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        z-index: 3;
-        font-size: 30px;
-        cursor: pointer;
-        display: none;
-      }
-      .link-to a {
-        color: greenyellow;
-      }
-      .generate {
-        margin: 40px 0;
-        text-align: center;
-        font-size: 20px;
-      }
-      .generate a {
-        font-size: 20px;
-        color: darkorange;
-      }
-      .generate a:hover {
-        text-decoration: none;
-      }
-      .img {
-        position: absolute;
-        width: 407px;
-        height: 407px;
-        top: 0;
-        left: 0;
-      }
-      .text {
-        position: absolute;
-        width: 353px;
-        top: 432px;
-        left: 432px;
-        z-index: 1;
-        font-family: Times;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 20px;
-        line-height: 23px;
-      }
-      .cred {
-        position: absolute;
-        left: 25px;
-        bottom: 25px;
-        display: flex;
-        justify-content: space-between;
-        font-family: Times;
-        font-size: 32px;
-        line-height: 37px;
-        z-index: 5;
-        letter-spacing: 0.5px;
-      }
-      .loading {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 2;
-        background: rgba(0, 0, 0, 0.8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .loading-text {
-        color: cyan;
-        font-size: 20px;
-        text-align: center;
-        position: absolute;
-        left: 432px;
-        top: 384px;
-      }
-      .entropy {
-        font-size: 10px;
-        font-family: sans-serif;
-        color: darkgray;
-        position: absolute;
-        left: 432px;
-        top: 25px;
-      }
-      .iframe {
-        margin-top: 23px;
-      }
-      .num {
-        position: absolute;
-        left: 25px;
-        top: 432px;
-        font-size: 20px;
-        color: white;
-      }
-      .button {
-        position: absolute;
-        bottom: 25px;
-        left: 432px;
-        z-index: 2;
-        font-size: 29px;
-        background: none;
-        font-size: 20px;
-        line-height: 23px;
-        font-family: Times;
-        border: none;
-        cursor: pointer;
-        color: white;
-        padding: 0;
-      }
-      .button:hover {
-        color: cyan;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="artwork">
-        <div class="num" id="num"></div>
-        <div class="entropy">
-          World is entropy.<br/>Only you create rules<br/>and see the meaning.
-        </div>
-        <!-- <div class="link-to" id="link-to">
-          <a href="https://bit.ly/349flF1" target="_blank">listen now on soundcloud</a>
-        </div> -->
-        <button class="button" id="generate">show next connection →</button>
-        <div class="loading" id="loading" style="display: none;">
-          <div class="loading-text">searching in entropy...</div>
-        </div>
-        <div class="text" id="text">
-          <!-- The network is represented by a set of abstract machines that can exchange messages. These messages consist of formal terms. These terms reveal some of the internal structure of the messages, but some parts will hopefully remain opaque to the adversary. -->
-        </div>
-        <img src="" id="img" class="img" />
-        <div class="cred">
-          СКРЕПЫ
-        </div>
-      </div>
-      <div class="generate" id="generate">
-        <a href="https://bit.ly/3gV3dNu" target="_blank">listen now on Soundcloud</a>
-        <!-- Скрепы by Human Connections -->
-      </div>
-      <img src="https://bit.ly/39G1cAo" style="display: none;" />
+
+<head>
+  <title>World is entropy. Only you create rules and see the meaning.</title>
+  <link rel="icon" href="favicon.ico">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-direction: column;
+      font-family: Times;
+      padding: 0;
+      margin: 0;
+      background-color: #0f0f0f;
+    }
+
+    .container {}
+
+    .artwork {
+      background: #000;
+      width: 814px;
+      height: 814px;
+      color: #fff;
+      position: relative;
+    }
+
+    .artwork:hover .link-to {
+      display: flex;
+    }
+
+    .link-to {
+      color: blueviolet;
+      position: absolute;
+      top: 0;
+      left: 23px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      z-index: 3;
+      font-size: 30px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .link-to a {
+      color: greenyellow;
+    }
+
+    .generate {
+      margin: 40px 0;
+      text-align: right;
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+    .generate a {
+      font-size: 20px;
+      color: darkorange;
+    }
+
+    .generate a:hover {
+      text-decoration: none;
+    }
+
+    .img {
+      position: absolute;
+      width: 407px;
+      height: 407px;
+      top: 0;
+      left: 0;
+    }
+
+    .text {
+      position: absolute;
+      width: 353px;
+      top: 432px;
+      left: 432px;
+      z-index: 1;
+      font-family: Times;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 23px;
+    }
+
+    .cred {
+      position: absolute;
+      left: 25px;
+      bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      font-family: Times;
+      font-size: 32px;
+      line-height: 37px;
+      z-index: 5;
+      letter-spacing: 0.5px;
+    }
+
+    .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-text {
+      color: cyan;
+      font-size: 20px;
+      text-align: center;
+      position: absolute;
+      left: 432px;
+      top: 384px;
+    }
+
+    .entropy {
+      font-size: 10px;
+      font-family: sans-serif;
+      color: darkgray;
+      position: absolute;
+      left: 432px;
+      top: 25px;
+    }
+
+    .iframe {
+      margin-top: 23px;
+    }
+
+    .num {
+      position: absolute;
+      left: 25px;
+      top: 432px;
+      font-size: 20px;
+      color: white;
+    }
+
+    .button {
+      position: absolute;
+      bottom: 25px;
+      left: 432px;
+      z-index: 2;
+      font-size: 29px;
+      background: none;
+      font-size: 20px;
+      line-height: 23px;
+      font-family: Times;
+      border: none;
+      cursor: pointer;
+      color: white;
+      padding: 0;
+    }
+
+    .button:hover {
+      color: cyan;
+    }
+
+    .release {
+      display: block;
+      margin-right: 24px;
+    }
+
+    .release:last-child {
+      margin-right: 0;
+    }
+
+    .releases {
+      margin-top: 50px;
+      margin-bottom: 64px;
+      width: 814px;
+      display: flex;
+    }
+
+    .release img {
+      width: 100%;
+    }
+
+    .release__name {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 8px;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .emails {
+      font-family: sans-serif;
+      line-height: 160%;
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 24px;
+      margin-top: 16px;
+    }
+
+    .emails a {
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="releases">
+      <a href="https://www.gate.fm/IkK8ALa" target="blank" class="release">
+        <img src="amomentarylapse.jpg" alt="">
+        <div class="release__name">Human Connections - A Momentary Lapse Of Harmony<br />(Single)</div>
+      </a>
+      <a href="https://ampl.ink/8Z1lQ" target="blank" class="release">
+        <img src="phrases.jpg" alt="">
+        <div class="release__name">Human Connections - Phrases<br />(Full Album)</div>
+      </a>
     </div>
-    <script>
-      const fetchData = () => {
-        fetch(`https://litipsum.com/api/json`).then((response) => {
-          return response.json();
-        })
+    <div class="artwork">
+      <div class="num" id="num"></div>
+      <div class="entropy">
+        World is entropy.<br />Only you create rules<br />and see the meaning.
+      </div>
+      <!-- <div class="link-to" id="link-to">
+        <a href="https://bit.ly/349flF1" target="_blank">listen now on soundcloud</a>
+      </div> -->
+      <button class="button" id="generate">show next connection →</button>
+      <div class="loading" id="loading" style="display: none;">
+        <div class="loading-text">searching in entropy...</div>
+      </div>
+      <div class="text" id="text">
+        <!-- The network is represented by a set of abstract machines that can exchange messages. These messages consist of formal terms. These terms reveal some of the internal structure of the messages, but some parts will hopefully remain opaque to the adversary. -->
+      </div>
+      <img src="" id="img" class="img" />
+      <div class="cred">
+        СКРЕПЫ
+      </div>
+    </div>
+    <div class="generate" id="generate">
+      <a href="https://bit.ly/3gV3dNu" target="_blank">listen now on Soundcloud</a>
+      <!-- Скрепы by Human Connections -->
+    </div>
+    <img src="https://bit.ly/39G1cAo" style="display: none;" />
+    <div class="emails">
+      Contact: <a target="blank" href="mailto: sergeychuvayev@gmail.com">sergeychuvayev@gmail.com</a>
+      <br />
+      Artist name: Sergey Chuvayev
+    </div>
+  </div>
+  <script>
+    const fetchData = () => {
+      fetch(`https://litipsum.com/api/json`).then((response) => {
+        return response.json();
+      })
         .then((data) => {
           text.innerText = data.text[0].slice(0, 400) + '...';
         });
 
-        fetch(`https://source.unsplash.com/random`).then((response) => {
-          img.src = response.url;
-        })
-      }
+      fetch(`https://source.unsplash.com/random`).then((response) => {
+        img.src = response.url;
+      })
+    }
 
-      const init = () => {
+    const init = () => {
+      fetchData();
+      const text = document.getElementById("text");
+      const num = document.getElementById("num");
+      const img = document.getElementById("img");
+      const generate = document.getElementById("generate");
+      const loading = document.getElementById("loading");
+      const button = document.getElementById("generate");
+      num.innerText = `#${Math.floor(Math.random() * 999)}`;
+      button.addEventListener('click', () => {
         fetchData();
-        const text = document.getElementById("text");
-        const num = document.getElementById("num");
-        const img = document.getElementById("img");
-        const generate = document.getElementById("generate");
-        const loading = document.getElementById("loading");
-        const button = document.getElementById("generate");
-        num.innerText = `#${Math.floor(Math.random() * 999)}`;
-        button.addEventListener('click', () => {
-          fetchData();
-          loading.style = 'display: flex;';
-          generate.style = 'opacity: 0;';
-          setTimeout(() => {
-            num.innerText = `#${Math.floor(Math.random() * 999)}`;
-            loading.style = 'display: none;';
-            generate.style = 'opacity: 1;';
-          }, 3000);
-        });
-      }
+        loading.style = 'display: flex;';
+        generate.style = 'opacity: 0;';
+        setTimeout(() => {
+          num.innerText = `#${Math.floor(Math.random() * 999)}`;
+          loading.style = 'display: none;';
+          generate.style = 'opacity: 1;';
+        }, 3000);
+      });
+    }
 
-      window.addEventListener('load', () => { init(); })
-    </script>
-  </body>
+    window.addEventListener('load', () => { init(); })
+  </script>
+</body>
+
 </html>
