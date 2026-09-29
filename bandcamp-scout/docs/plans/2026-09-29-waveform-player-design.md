@@ -1,14 +1,21 @@
-# Bandcamp Scout waveform player
+# Bandcamp Scout player redesign
 
-Approved direction: retain the charcoal and lime listening-room identity, widen the desktop page to roughly 1,400px, and give every release a genuine, seekable waveform. Preserve release links, local feedback, and mobile usability.
+## Final approved scope
 
-## Implementation plan
+The initial waveform proposal was superseded by the user's instruction to keep the live Bandcamp embeds, omit waveforms, fix overlapping playback, and widen/redesign the page. Daily selections must not depend on committed audio files or expiring preview URLs.
 
-1. Inspect public preview sources and choose a static-hosting-compatible media source. Keep audio on its original host; commit only metadata and waveform peaks derived from that audio.
-2. Replace independent iframe players with one shared HTML audio element, accessible per-release controls, playback progress, and clear loading/error states. Starting a different selection replaces the current source immediately. Handle rapid switching and rejected playback without stale UI updates.
-3. Use wider release rows, cover artwork, clear track metadata, and full-width waveform timelines. Keep the same restrained colors and responsive mobile stacking.
-4. Verify real preview playback, seeking, switching, keyboard controls, feedback persistence, unavailable media, and desktop/mobile layout. Commit the reviewed implementation.
+Retain the charcoal and lime listening-room identity. Widen the desktop page to 1,440px, use more generous horizontal player rows, highlight the active release, and preserve mobile stacking, release links, voting, and local feedback storage.
 
-## Constraints
+## Playback architecture
 
-The site is static and currently embeds six album players. Cross-origin embeds do not expose their audio to this page. Real waveform rendering requires preview audio or pregenerated peaks; fabricated decorative bars are not a substitute. Preview availability must be verified before settling the media integration.
+Bandcamp's embed reports readiness via `playerinited` but does not expose a supported remote pause/play interface. Keep iframe markup in inert templates and mount at most one live iframe. The first player loads automatically. Loading another release removes the previous iframe synchronously, which destroys its playback context. The user then presses play in Bandcamp's native controls. A Stop / close control also unloads the iframe.
+
+Validate readiness messages against both the Bandcamp origin and the active iframe window. Cancel stale loading timers on switches. Show reload and direct-link guidance when the player takes too long. Label the state as ready, never infer whether the inaccessible native player is playing.
+
+## Validation
+
+Reproduce the original multiple-player failure with a browser regression test. Check real Bandcamp playback and switching, fixture-based native audio context destruction, rapid switching, keyboard controls, feedback persistence, slow loading, and widths from 320px to 1,440px. Review desktop/mobile screenshots before committing.
+
+## Future waveforms
+
+Waveform calculation can run entirely in the browser using the Web Audio API. Obtaining readable current audio bytes is a separate integration problem: direct browser fetches of the tested Bandcamp album and preview URLs failed. This change does not add a proxy, scrape audio, or implement waveforms.

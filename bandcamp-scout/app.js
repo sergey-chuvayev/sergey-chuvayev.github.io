@@ -65,3 +65,90 @@ for (const card of releases) {
 }
 document.querySelector('#copy-all').addEventListener('click', () => copy(document.querySelector('#feedback-text')));
 render();
+
+// Bandcamp exposes readiness, but no supported remote pause/play interface.
+// Mount at most one iframe: removing it destroys its audio context, including
+// playback that is still loading. Do not infer playback from hover or focus.
+const players = [];
+let activePlayer = null;
+
+function deactivatePlayer(player) {
+  clearTimeout(player.timer);
+  player.frame?.remove();
+  player.frame = null;
+  player.card.classList.remove('is-active');
+  player.panel.hidden = true;
+  player.load.hidden = false;
+  player.load.setAttribute('aria-expanded', 'false');
+  if (activePlayer === player) activePlayer = null;
+}
+
+function activatePlayer(player, moveFocus = true) {
+  if (activePlayer) deactivatePlayer(activePlayer);
+  activePlayer = player;
+  player.card.classList.add('is-active');
+  player.load.hidden = true;
+  player.load.setAttribute('aria-expanded', 'true');
+  player.panel.hidden = false;
+  player.label.textContent = 'Loading Bandcamp…';
+  player.hint.textContent = 'Once loaded, press play in the player below.';
+  player.retry.hidden = true;
+  player.frame = player.template.content.querySelector('iframe').cloneNode(true);
+  player.slot.replaceChildren(player.frame);
+  if (moveFocus) player.close.focus({ preventScroll: true });
+  player.timer = setTimeout(() => {
+    if (activePlayer !== player) return;
+    player.label.textContent = 'Taking longer than expected';
+    player.hint.textContent = 'Try reloading, or use the Bandcamp link to listen.';
+    player.retry.hidden = false;
+  }, 15000);
+}
+
+for (const card of releases) {
+  const embed = card.querySelector('.embed');
+  const template = embed.querySelector('.player-template');
+  if (!template) continue;
+  const artist = card.querySelector('.artist').textContent;
+  const title = card.querySelector('.title').textContent;
+  const load = document.createElement('button');
+  load.className = 'load-player';
+  load.type = 'button';
+  load.setAttribute('aria-label', `Load player for ${artist} — ${title}`);
+  load.setAttribute('aria-expanded', 'false');
+  load.innerHTML = '<span class="load-icon" aria-hidden="true">↗</span><span class="load-copy"><strong>Load player</strong><span>Listen on Bandcamp, right here.</span></span><span class="load-arrow" aria-hidden="true">→</span>';
+  const panel = document.createElement('div');
+  panel.className = 'player-panel';
+  panel.id = `${card.id}-player`;
+  panel.hidden = true;
+  load.setAttribute('aria-controls', panel.id);
+  panel.innerHTML = '<div class="player-toolbar"><span class="player-label" role="status"></span><button class="retry-player" type="button" hidden>Reload</button><button class="close-player" type="button">Stop / close <span aria-hidden="true">×</span></button></div><div class="player-slot"></div><p class="player-hint"></p>';
+  embed.append(load, panel);
+  const player = {
+    card, template, load, panel,
+    slot: panel.querySelector('.player-slot'),
+    label: panel.querySelector('.player-label'),
+    hint: panel.querySelector('.player-hint'),
+    close: panel.querySelector('.close-player'),
+    retry: panel.querySelector('.retry-player'),
+    frame: null, timer: null,
+  };
+  player.close.setAttribute('aria-label', `Stop and close player for ${artist}`);
+  load.addEventListener('click', () => activatePlayer(player));
+  player.retry.addEventListener('click', () => activatePlayer(player));
+  player.close.addEventListener('click', () => {
+    deactivatePlayer(player);
+    load.focus({ preventScroll: true });
+  });
+  players.push(player);
+}
+
+window.addEventListener('message', event => {
+  const player = activePlayer;
+  if (!player || event.origin !== 'https://bandcamp.com' ||
+      event.source !== player.frame?.contentWindow || event.data !== 'playerinited') return;
+  clearTimeout(player.timer);
+  player.label.textContent = 'Ready to listen';
+  player.hint.textContent = 'Press play above. Loading another release stops this one.';
+  player.retry.hidden = true;
+});
+if (players.length) activatePlayer(players[0], false);
