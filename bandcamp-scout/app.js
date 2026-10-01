@@ -1,18 +1,34 @@
 'use strict';
 const key = 'bandcamp-scout-votes-v1';
 const releases = [...document.querySelectorAll('.release')];
-let votes = {};
+// Same key, richer flat map: { [albumId]: { vote: 'yes'|'no', artist, title, url } }.
+// Legacy string votes are accepted; absent-volume entries are never discarded.
+let votes = Object.create(null);
 let storageAvailable = true;
+function metadata(card) {
+  return { artist: card.querySelector('.artist').textContent.trim(),
+    title: card.querySelector('.title').textContent.trim(),
+    url: card.querySelector('.actions a').href };
+}
+function saveVotes() {
+  try { localStorage.setItem(key, JSON.stringify(votes)); storageAvailable = true; }
+  catch { storageAvailable = false; }
+}
 try {
   const stored = JSON.parse(localStorage.getItem(key) || '{}');
   if (stored && typeof stored === 'object' && !Array.isArray(stored)) {
-    for (const card of releases) {
-      const id = card.dataset.album;
-      if (stored[id] === 'yes' || stored[id] === 'no') votes[id] = stored[id];
+    for (const [id, value] of Object.entries(stored)) {
+      const entry = typeof value === 'string' ? { vote: value } : value;
+      if (entry && (entry.vote === 'yes' || entry.vote === 'no')) votes[id] = entry;
     }
+    for (const card of releases) {
+      const entry = votes[card.dataset.album];
+      if (entry) Object.assign(entry, metadata(card));
+    }
+    saveVotes();
   }
 } catch { storageAvailable = false; }
-const lineFor = card => `${votes[card.dataset.album] === 'yes' ? 'YES' : 'NO'}: ${card.querySelector('.artist').textContent} — ${card.querySelector('.title').textContent}`;
+const lineFor = card => `${votes[card.dataset.album]?.vote === 'yes' ? 'YES' : 'NO'}: ${card.querySelector('.artist').textContent} — ${card.querySelector('.title').textContent}`;
 let statusTimer;
 function announce(message) {
   const status = document.querySelector('#status');
@@ -23,12 +39,13 @@ function announce(message) {
 function render() {
   const lines = [];
   for (const card of releases) {
-    const vote = votes[card.dataset.album];
+    const vote = votes[card.dataset.album]?.vote;
     for (const button of card.querySelectorAll('[data-vote]')) button.setAttribute('aria-pressed', String(button.dataset.vote === vote));
     card.querySelector('.vote-result').hidden = !vote;
     card.querySelector('.vote-line').value = vote ? lineFor(card) : '';
     if (vote) lines.push(lineFor(card));
   }
+  renderLiked();
   document.querySelector('#vote-count').textContent = `${lines.length} / ${releases.length}`;
   document.querySelector('#empty-feedback').hidden = lines.length > 0;
   const feedback = document.querySelector('#feedback-text');
@@ -38,6 +55,91 @@ function render() {
   document.querySelector('#copy-all').disabled = !lines.length;
   document.querySelector('#storage-note').textContent = storageAvailable ? 'Saved on this browser.' : 'Browser storage unavailable. Copy your feedback before leaving.';
 }
+function safeURL(value) {
+  try {
+    const url = new URL(value);
+    return ['https:', 'http:'].includes(url.protocol) ? url.href : null;
+  } catch { return null; }
+}
+function listRow(title, detail, url) {
+  const row = document.createElement('li');
+  row.className = 'library-row';
+  const copy = document.createElement('div');
+  copy.className = 'library-copy';
+  const heading = document.createElement('strong');
+  heading.textContent = title;
+  const note = document.createElement('span');
+  note.textContent = detail;
+  copy.append(heading, note);
+  row.append(copy);
+  if (safeURL(url)) {
+    const open = document.createElement('a');
+    open.href = safeURL(url);
+    open.target = '_blank';
+    open.rel = 'noopener';
+    open.textContent = 'Open ↗';
+    open.setAttribute('aria-label', `Open ${title} (new tab)`);
+    row.append(open);
+  }
+  return row;
+}
+function renderLiked() {
+  const list = document.querySelector('#liked-list');
+  list.replaceChildren();
+  const likes = Object.entries(votes).filter(([, entry]) => entry.vote === 'yes');
+  document.querySelector('#liked-count').textContent = likes.length;
+  document.querySelector('#empty-liked').hidden = likes.length > 0;
+  for (const [id, entry] of likes) {
+    const title = entry.title || `Saved release ${id}`;
+    const row = listRow(title, entry.artist || 'Older like · details unavailable', entry.url);
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = 'Remove';
+    remove.setAttribute('aria-label', `Remove ${title} from liked`);
+    remove.addEventListener('click', () => {
+      const index = [...list.children].indexOf(row);
+      delete votes[id];
+      saveVotes();
+      render();
+      const next = list.children[Math.min(index, list.children.length - 1)];
+      (next?.querySelector('button') || document.querySelector('#liked-title')).focus({ preventScroll: true });
+      announce('Like removed.');
+    });
+    row.append(remove);
+    list.append(row);
+  }
+}
+const humanize = value => String(value || '').replace(/[-_]+/g, ' ').trim();
+async function loadStash() {
+  const status = document.querySelector('#stash-status');
+  const retry = document.querySelector('#stash-retry');
+  retry.hidden = true;
+  status.textContent = 'Loading your stash…';
+  try {
+    const response = await fetch('./custom-stash.json');
+    if (!response.ok) throw new Error('Stash unavailable');
+    const data = await response.json();
+    if (!Array.isArray(data.items)) throw new Error('Invalid stash');
+    const rows = data.items.map((item, index) => {
+      if (!safeURL(item.url)) throw new Error('Invalid stash link');
+      const path = (item.path || '').split('/');
+      const title = item.title || item.label || humanize(item.slug) ||
+        humanize(path.slice(1).join('/')) || `YouTube · ${item.id || new URL(item.url).searchParams.get('v') || index + 1}`;
+      const detail = [String(index + 1).padStart(2, '0'), item.source,
+        humanize(item.artist || path[0]), item.kind].filter(Boolean).join(' / ');
+      return listRow(title, detail, item.url);
+    });
+    document.querySelector('#stash-list').replaceChildren(...rows);
+    document.querySelector('#stash-count').textContent = rows.length;
+    status.textContent = rows.length ? 'Your shared finds, in original order. Open a link to listen.' : 'No finds in the stash yet.';
+  } catch {
+    status.textContent = 'Couldn’t load the stash. Check your connection and try again.';
+    retry.hidden = false;
+  }
+}
+document.querySelector('#stash-retry').addEventListener('click', loadStash);
+loadStash();
+
 async function copy(field) {
   try {
     await navigator.clipboard.writeText(field.value);
@@ -54,10 +156,9 @@ for (const card of releases) {
   for (const button of card.querySelectorAll('[data-vote]')) {
     button.addEventListener('click', () => {
       const id = card.dataset.album;
-      if (votes[id] === button.dataset.vote) delete votes[id];
-      else votes[id] = button.dataset.vote;
-      try { localStorage.setItem(key, JSON.stringify(votes)); storageAvailable = true; }
-      catch { storageAvailable = false; }
+      if (votes[id]?.vote === button.dataset.vote) delete votes[id];
+      else votes[id] = { vote: button.dataset.vote, ...metadata(card) };
+      saveVotes();
       render();
     });
   }

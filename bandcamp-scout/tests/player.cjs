@@ -17,7 +17,7 @@ const fixture = `<button onclick="document.querySelector('audio').play()">Play p
 (async () => {
   const server = createServer(async (req, res) => {
     const file = req.url === '/' ? 'index.html' : req.url.slice(1);
-    if (!['index.html', 'app.js', 'style.css'].includes(file)) { res.writeHead(404).end(); return; }
+    if (!['index.html', 'app.js', 'style.css', 'custom-stash.json'].includes(file)) { res.writeHead(404).end(); return; }
     res.setHeader('Content-Type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html');
     res.end(await readFile(path.join(__dirname, '..', file)));
   });
@@ -62,12 +62,43 @@ const fixture = `<button onclick="document.querySelector('audio').play()">Play p
     await page.locator('#release-1 .like').click();
     await page.locator('#release-2 .dislike').click();
     assert.equal(await page.locator('#vote-count').textContent(), '2 / 6');
-    assert.match(await page.locator('#feedback-text').inputValue(), /YES: UMT[\s\S]*NO: Aedis/);
+    assert.match(await page.locator('#feedback-text').inputValue(), /YES: Aedis[\s\S]*NO: shoal/);
     await page.reload();
     assert.equal(await page.locator('#release-1 .like').getAttribute('aria-pressed'), 'true');
     await page.locator('#release-1 .like').click();
     assert.equal(await page.locator('#vote-count').textContent(), '1 / 6');
     console.log('PASS: voting, persistence, and clearing a vote');
+    await page.waitForSelector('#stash-list li');
+    const seed = JSON.parse(await readFile(path.join(__dirname, '..', 'custom-stash.json')));
+    assert.deepEqual(await page.locator('#stash-list a').evaluateAll(links => links.map(a => a.href)), seed.items.map(item => item.url));
+    assert.equal(await page.locator('#stash-list iframe').count(), 0);
+    await page.evaluate(() => localStorage.setItem('bandcamp-scout-votes-v1', JSON.stringify({
+      '2442752753': 'yes', '2917671226': 'no',
+      'old-volume': { vote: 'yes', artist: 'Past artist', title: 'Past record', url: 'https://example.bandcamp.com/album/past-record' },
+      'legacy-absent': 'no'
+    })));
+    await page.reload();
+    assert.equal(await page.locator('#liked-list li').count(), 2);
+    assert.equal(await page.locator('#vote-count').textContent(), '2 / 6');
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bandcamp-scout-votes-v1'))['2442752753'].title), 'Body / Mind');
+    // Simulate replacing the volume: the old article is absent before app.js runs.
+    await page.route('**/index.html', async route => {
+      const html = await readFile(path.join(__dirname, '..', 'index.html'), 'utf8');
+      await route.fulfill({ contentType: 'text/html', body: html.replace(/<article class="release" id="release-1"[\s\S]*?<\/article>/, '') });
+    });
+    await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
+    assert.equal(await page.locator('#liked-list li').count(), 2);
+    assert.match(await page.locator('#liked-list').textContent(), /Body \/ Mind/);
+    assert.equal(await page.locator('#vote-count').textContent(), '1 / 5');
+    await page.getByRole('button', { name: 'Remove Body / Mind from liked', exact: true }).click();
+    await page.reload();
+    assert.equal(await page.locator('#liked-list li').count(), 1);
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bandcamp-scout-votes-v1'))['legacy-absent'].vote), 'no');
+    await page.goto(`http://127.0.0.1:${server.address().port}`);
+    await page.locator('#release-1 .like').click();
+    await page.locator('#release-1 .dislike').click();
+    assert.equal(await page.locator('#liked-list li').count(), 1);
+    console.log('PASS: seed order, legacy migration, volume swaps, shelf removal, and dislike');
 
     for (const width of [1440, 1024, 768, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });

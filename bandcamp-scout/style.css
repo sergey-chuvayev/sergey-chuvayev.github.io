@@ -131,3 +131,27 @@ footer a { min-height: 44px; display: flex; align-items: center; white-space: no
   .load-player { padding: 14px; }
   .load-arrow { display: none; }
 }
+
+/* Compact shelves share the daily feed's charcoal panels and mono labels. */
+.library-nav { display: flex; flex-wrap: wrap; gap: 8px 24px; border-block: 1px solid var(--line); margin-bottom: 24px; font: 11px var(--mono); }
+.library-nav a { display: flex; align-items: center; min-height: 48px; color: var(--accent); text-decoration: none; }
+.library { border: 1px solid var(--line); background: var(--panel); padding: 24px; margin-bottom: 24px; }
+.library-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.library-heading h2 { margin: 0; font-size: clamp(22px, 4vw, 30px); letter-spacing: -.8px; }
+.library-count { color: var(--accent); font: 12px var(--mono); }
+.library-note { color: var(--muted); font-size: 13px; }
+.library-list { list-style: none; padding: 0; margin: 16px 0 0; }
+.library-list:empty { margin: 0; }
+.library-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+.library-copy { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.library-copy strong { display: block; font-size: 15px; font-weight: 500; }
+.library-copy span { display: block; margin-top: 4px; color: var(--muted); font: 10px/1.6 var(--mono); }
+.library-row a, .library-row button { flex-shrink: 0; font: 11px var(--mono); }
+.library-row a { color: var(--accent); min-height: 44px; display: flex; align-items: center; text-decoration: none; }
+.library-row button { padding: 10px; }
+@media (max-width: 600px) {
+  .library { padding: 18px 14px; }
+  .library-row { flex-wrap: wrap; gap: 8px 16px; }
+  .library-copy { flex-basis: 100%; }
+  .library-nav { gap: 8px 18px; font-size: 10px; }
+}
