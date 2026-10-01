@@ -1,0 +1,10 @@
+{
+  "name": "bandcamp-scout",
+  "private": true,
+  "scripts": {
+    "test": "node tests/player.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
