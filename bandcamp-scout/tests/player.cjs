@@ -62,7 +62,7 @@ const fixture = `<button onclick="document.querySelector('audio').play()">Play p
     await page.locator('#release-1 .like').click();
     await page.locator('#release-2 .dislike').click();
     assert.equal(await page.locator('#vote-count').textContent(), '2 / 6');
-    assert.match(await page.locator('#feedback-text').inputValue(), /YES: Aedis[\s\S]*NO: shoal/);
+    assert.match(await page.locator('#feedback-text').inputValue(), /YES: B\. McQueen & Priori[\s\S]*NO: Cousin/);
     await page.reload();
     assert.equal(await page.locator('#release-1 .like').getAttribute('aria-pressed'), 'true');
     await page.locator('#release-1 .like').click();
@@ -73,14 +73,14 @@ const fixture = `<button onclick="document.querySelector('audio').play()">Play p
     assert.deepEqual(await page.locator('#stash-list a').evaluateAll(links => links.map(a => a.href)), seed.items.map(item => item.url));
     assert.equal(await page.locator('#stash-list iframe').count(), 0);
     await page.evaluate(() => localStorage.setItem('bandcamp-scout-votes-v1', JSON.stringify({
-      '2442752753': 'yes', '2917671226': 'no',
+      '1917508445': 'yes', '1222519999': 'no',
       'old-volume': { vote: 'yes', artist: 'Past artist', title: 'Past record', url: 'https://example.bandcamp.com/album/past-record' },
       'legacy-absent': 'no'
     })));
     await page.reload();
     assert.equal(await page.locator('#liked-list li').count(), 2);
     assert.equal(await page.locator('#vote-count').textContent(), '2 / 6');
-    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bandcamp-scout-votes-v1'))['2442752753'].title), 'Body / Mind');
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bandcamp-scout-votes-v1'))['1917508445'].title), 'Allergic');
     // Simulate replacing the volume: the old article is absent before app.js runs.
     await page.route('**/index.html', async route => {
       const html = await readFile(path.join(__dirname, '..', 'index.html'), 'utf8');
@@ -88,9 +88,9 @@ const fixture = `<button onclick="document.querySelector('audio').play()">Play p
     });
     await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
     assert.equal(await page.locator('#liked-list li').count(), 2);
-    assert.match(await page.locator('#liked-list').textContent(), /Body \/ Mind/);
+    assert.match(await page.locator('#liked-list').textContent(), /Allergic/);
     assert.equal(await page.locator('#vote-count').textContent(), '1 / 5');
-    await page.getByRole('button', { name: 'Remove Body / Mind from liked', exact: true }).click();
+    await page.getByRole('button', { name: 'Remove Allergic from liked', exact: true }).click();
     await page.reload();
     assert.equal(await page.locator('#liked-list li').count(), 1);
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bandcamp-scout-votes-v1'))['legacy-absent'].vote), 'no');
